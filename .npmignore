@@ -3,9 +3,12 @@ node_modules
 dist
 coverage
 .github
-src/__tests__
+src
+dist/__tests__
 
 # Configuration files
+.editorconfig
+.gitattributes
 .gitignore
 .eslintignore
 .eslintrc.js
