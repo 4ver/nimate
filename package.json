@@ -27,7 +27,7 @@
   "author": "Donal Linehan",
   "license": "MIT",
   "dependencies": {
-    "events": "^3.3.0",
+    "eventemitter3": "^5.0.1",
     "ts-easing": "^0.2.0"
   },
   "devDependencies": {

@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import EventEmitter from 'eventemitter3';
 import { Animate, AnimatableValue } from './animate';
 
 type SequenceItem = Animate | Sequence;
@@ -64,6 +64,7 @@ export class Sequence extends EventEmitter {
     this.activeAnimates = 0;
     this.emit('start');
     this.next();
+    return this;
   }
 
   public stop() {
@@ -75,5 +76,6 @@ export class Sequence extends EventEmitter {
       }
     });
     this.emit('stop');
+    return this;
   }
 }

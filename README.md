@@ -48,14 +48,12 @@ const animate = new Animate({
   easing: Easing.easeInOutQuad,
 });
 
-// Attach event listeners
-animate.on('start', () => console.log('Animation Start'));
-animate.on('update', value => console.log('Animation Update:', value));
-animate.on('complete', () => console.log('Animation Complete'));
-animate.on('stop', () => console.log('Animation Stop'));
-
-// Start the animation
-animate.start();
+animate
+  .on('start', () => console.log('Animation Start'))
+  .on('update', value => console.log('Animation Update:', value))
+  .on('complete', () => console.log('Animation Complete'))
+  .on('stop', () => console.log('Animation Stop'))
+  .start();
 ```
 
 ### Sequence of Animations
@@ -82,13 +80,12 @@ const animate2 = new Animate({
 const sequence = new Sequence({ items: [animate1, animate2] });
 
 // Attach event listeners
-sequence.on('start', () => console.log('Sequence Start'));
-sequence.on('update', value => console.log('Sequence Update:', value));
-sequence.on('complete', () => console.log('Sequence Complete'));
-sequence.on('stop', () => console.log('Sequence Stop'));
-
-// Start the sequence
-sequence.start();
+sequence
+  .on('start', () => console.log('Sequence Start'))
+  .on('update', value => console.log('Sequence Update:', value))
+  .on('complete', () => console.log('Sequence Complete'))
+  .on('stop', () => console.log('Sequence Stop'))
+  .start();
 ```
 
 ### Parallel Sequences
@@ -125,10 +122,11 @@ const sequence1 = new Sequence({ items: [animate1, animate2] });
 const parallelSequence = new Sequence({ items: [sequence1, animate3], parallel: true });
 
 // Attach event listeners
-parallelSequence.on('start', () => console.log('Parallel Sequence Start'));
-parallelSequence.on('update', value => console.log('Parallel Sequence Update:', value));
-parallelSequence.on('complete', () => console.log('Parallel Sequence Complete'));
-parallelSequence.on('stop', () => console.log('Parallel Sequence Stop'));
+parallelSequence
+  .on('start', () => console.log('Parallel Sequence Start'))
+  .on('update', value => console.log('Parallel Sequence Update:', value))
+  .on('complete', () => console.log('Parallel Sequence Complete'))
+  .on('stop', () => console.log('Parallel Sequence Stop'));
 
 // Start the sequence
 parallelSequence.start();

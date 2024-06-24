@@ -1,4 +1,4 @@
-import { EventEmitter } from 'events';
+import EventEmitter from 'eventemitter3';
 import { TEasing } from 'ts-easing';
 import { easing as e } from './easing';
 
@@ -96,6 +96,7 @@ export class Animate extends EventEmitter {
     this.startTime = performance.now();
     this.emit('start');
     this.requestId = requestAnimationFrame(this.tick);
+    return this;
   }
 
   public stop() {
@@ -103,5 +104,6 @@ export class Animate extends EventEmitter {
       cancelAnimationFrame(this.requestId);
       this.emit('stop');
     }
+    return this;
   }
 }
