@@ -1,6 +1,6 @@
 # nimate
 
-![npm](https://img.shields.io/npm/v/nimate) ![license](https://img.shields.io/npm/l/nimate) ![issues](https://img.shields.io/github/issues/4ver/nimate) ![stars](https://img.shields.io/github/stars/4ver/nimate)
+[![npm](https://img.shields.io/npm/v/nimate)](https://www.npmjs.com/package/nimate)  ![issues](https://img.shields.io/github/issues/4ver/nimate) ![stars](https://img.shields.io/github/stars/4ver/nimate)
 
 **nimate** is a simple, flexible animation library designed to work across all JavaScript environments. With **nimate**, you can create smooth animations and sequence them with ease, utilizing easing functions from the `ts-easing` package.
 
@@ -180,10 +180,3 @@ Creates a sequence of animations.
 - `update`: Emitted on each update with the current value.
 - `complete`: Emitted when the sequence completes.
 - `stop`: Emitted when the sequence is stopped.
-
-## 📄 License
-
-MIT
-```
-This `README.md` provides an overview of the `nimate` library, its features, installation instructions, usage examples, API documentation, and license information. Adjust the content as needed to fit your specific implementation and preferences.
-```
