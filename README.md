@@ -7,7 +7,7 @@
 ## ✨ Features
 
 - Supports animations of numbers, objects, and arrays.
-- Uses `ts-easing` package.
+- [streamich/ts-easing](https://github.com/streamich/ts-easing) for easing.
 - Configurable sequences that can run in parallel or series.
 - Works in browsers, Node.js, and other JavaScript environments.
 - Emits events for `start`, `update`, `complete`, and `stop` for animations and sequences.
