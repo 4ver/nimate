@@ -1,0 +1,44 @@
+{
+  "name": "nimate",
+  "version": "1.0.0",
+  "description": "A simple, flexible animation library.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "coverage": "jest --coverage",
+    "prepare": "npm run build",
+    "lint": "eslint 'src/**/*.{ts,tsx}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/4ver/nimate.git"
+  },
+  "keywords": [
+    "animation",
+    "tween",
+    "sequence",
+    "easing",
+    "javascript",
+    "typescript"
+  ],
+  "author": "Donal Linehan",
+  "license": "MIT",
+  "dependencies": {
+    "events": "^3.3.0",
+    "ts-easing": "^0.2.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.12",
+    "@types/raf": "^3.4.3",
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint": "^8.57.0",
+    "jest": "^29.7.0",
+    "raf": "^3.4.1",
+    "request-animation-frame-polyfill": "^1.1.2",
+    "ts-jest": "^29.1.5"
+  }
+}
