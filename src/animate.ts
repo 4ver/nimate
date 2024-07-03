@@ -138,10 +138,7 @@ export class Animate extends EventEmitter {
 
     const currentValue = this.getInterpolatedValue(this.from, this.to, easedT);
 
-    if (JSON.stringify(currentValue) !== JSON.stringify(this.previousValue)) {
-      this.emit('update', currentValue);
-      this.previousValue = currentValue;
-    }
+    this.emit('update', currentValue);
 
     // Check if animation is complete
     if ((!this.isReversed && t < 1) || (this.isReversed && t > 0)) {
