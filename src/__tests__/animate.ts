@@ -60,18 +60,6 @@ describe('Animate', () => {
     }).toThrow('Loop must be a non-negative number');
   });
 
-  it('should throw an error for invalid offset', () => {
-    expect(() => {
-      new Animate({
-        from: 0,
-        to: 100,
-        duration: 100,
-        offset: [0, 'invalid'] as any,
-        easing: e.linear,
-      });
-    }).toThrow('Offset must be an array of numbers between 0 and 1 with at least two values');
-  });
-
   it('should run a valid animation without errors', done => {
     const animate = new Animate({
       from: 0,
@@ -186,29 +174,6 @@ describe('Animate', () => {
 
     animate.start();
   });
-
-  it('should handle offset option correctly', done => {
-    const animate = new Animate({
-      from: 0,
-      to: 100,
-      duration: 100,
-      easing: e.linear,
-      offset: [0.2, 0.8],
-    });
-
-    animate.on('update', value => {
-      console.log(value);
-      expect(value).toBeGreaterThanOrEqual(20);
-      expect(value).toBeLessThanOrEqual(80);
-    });
-
-    animate.on('complete', () => {
-      done();
-    });
-
-    animate.start();
-  });
-
 
   it('should emit start event', done => {
     const animate = new Animate({

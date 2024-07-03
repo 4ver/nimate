@@ -13,7 +13,6 @@ interface AnimateOptions {
   delay?: number;
   direction?: 'normal' | 'reverse' | 'alternate';
   loop?: number;
-  offset?: number[];
 }
 
 export class Animate extends EventEmitter {
@@ -24,7 +23,6 @@ export class Animate extends EventEmitter {
   private delay: number;
   private direction: 'normal' | 'reverse' | 'alternate';
   private loop: number;
-  private offset: number[];
   private startTime: number;
   private process?: Process;
   private previousValue: AnimatableValue;
@@ -40,7 +38,6 @@ export class Animate extends EventEmitter {
     delay = 0,
     direction = 'normal',
     loop = 1,
-    offset = [0, 1],
   }: AnimateOptions) {
     super();
 
@@ -65,10 +62,6 @@ export class Animate extends EventEmitter {
       throw new Error('Loop must be a non-negative number');
     }
 
-    if (!Array.isArray(offset) || offset.length < 2 || offset.some(val => typeof val !== 'number' || val < 0 || val > 1)) {
-      throw new Error('Offset must be an array of numbers between 0 and 1 with at least two values');
-    }
-
     this.from = from;
     this.to = to;
     this.duration = duration;
@@ -76,7 +69,6 @@ export class Animate extends EventEmitter {
     this.delay = delay;
     this.direction = direction;
     this.loop = loop;
-    this.offset = offset;
     this.startTime = performance.now();
     this.previousValue = from;
     this.loopsCompleted = 0;
@@ -132,25 +124,15 @@ export class Animate extends EventEmitter {
     throw new Error('Unsupported value types');
   }
 
-  private updateValue(t: number): AnimatableValue {
-    let start = this.offset[0];
-    let end = this.offset[this.offset.length - 1];
-
-    for (let i = 0; i < this.offset.length - 1; i++) {
-      if (t >= this.offset[i] && t <= this.offset[i + 1]) {
-        start = this.offset[i];
-        end = this.offset[i + 1];
-        break;
-      }
-    }
-
-    const localT = Math.max(0, Math.min(1, (t - start) / (end - start)));
-    return this.getInterpolatedValue(this.from, this.to, localT);
-  }
-
   private tick = ({ timestamp }: { timestamp: number }) => {
     const elapsed = timestamp - this.startTime - this.delay;
+
+    // Handle the initial state
     if (elapsed < 0) {
+      if (JSON.stringify(this.previousValue) !== JSON.stringify(this.from)) {
+        this.emit('update', this.from);
+        this.previousValue = this.from;
+      }
       this.process = sync.update(this.tick, true);
       return;
     }
@@ -159,7 +141,7 @@ export class Animate extends EventEmitter {
     if (this.isReversed) t = 1 - t;
     const easedT = this.easing(t);
 
-    const currentValue = this.updateValue(easedT);
+    const currentValue = this.getInterpolatedValue(this.from, this.to, easedT);
 
     if (JSON.stringify(currentValue) !== JSON.stringify(this.previousValue)) {
       this.emit('update', currentValue);
@@ -192,6 +174,7 @@ export class Animate extends EventEmitter {
     this.isReversed = this.direction === 'reverse';
     this.hasCompleted = false;
     this.emit('start');
+    this.previousValue = this.from;
     this.process = sync.update(this.tick, true);
     return this;
   }
