@@ -20,19 +20,6 @@ Install the library using npm:
 npm install nimate
 ```
 
-**Note:** If `requestAnimationFrame` is not available in your environment, you will need to polyfill it. You can use the `raf` package for this:
-
-```bash
-npm install raf
-```
-
-Then, import and use the polyfill in your project:
-
-```javascript
-import raf from 'raf';
-raf.polyfill();
-```
-
 ## 💻 Usage
 
 ### Basic Animation
@@ -156,7 +143,6 @@ Creates an animation instance.
 - `update`: Emitted on each update with the current value.
 - `complete`: Emitted when the animation completes.
 - `stop`: Emitted when the animation is stopped.
-- `error`: Emitted when an error occurs during the animation.
 
 ### `Sequence`
 

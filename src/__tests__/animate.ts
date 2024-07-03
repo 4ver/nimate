@@ -2,6 +2,214 @@ import { Animate } from '../animate';
 import { easing as e } from '../easing';
 
 describe('Animate', () => {
+  it('should throw an error for invalid animatable value', () => {
+    expect(() => {
+      new Animate({
+        from: 0,
+        to: 'invalid',
+        duration: 100,
+        easing: e.linear,
+      } as any);
+    }).toThrow('Invalid animatable value');
+  });
+
+  it('should throw an error for negative duration', () => {
+    expect(() => {
+      new Animate({
+        from: 0,
+        to: 100,
+        duration: -100,
+        easing: e.linear,
+      });
+    }).toThrow('Duration must be a positive number');
+  });
+
+  it('should throw an error for negative delay', () => {
+    expect(() => {
+      new Animate({
+        from: 0,
+        to: 100,
+        duration: 100,
+        delay: -50,
+        easing: e.linear,
+      });
+    }).toThrow('Delay must be a non-negative number');
+  });
+
+  it('should throw an error for invalid direction', () => {
+    expect(() => {
+      new Animate({
+        from: 0,
+        to: 100,
+        duration: 100,
+        direction: 'invalid' as any,
+        easing: e.linear,
+      });
+    }).toThrow('Invalid direction');
+  });
+
+  it('should throw an error for negative loop', () => {
+    expect(() => {
+      new Animate({
+        from: 0,
+        to: 100,
+        duration: 100,
+        loop: -1,
+        easing: e.linear,
+      });
+    }).toThrow('Loop must be a non-negative number');
+  });
+
+  it('should throw an error for invalid offset', () => {
+    expect(() => {
+      new Animate({
+        from: 0,
+        to: 100,
+        duration: 100,
+        offset: [0, 'invalid'] as any,
+        easing: e.linear,
+      });
+    }).toThrow('Offset must be an array of numbers between 0 and 1 with at least two values');
+  });
+
+  it('should run a valid animation without errors', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    animate.on('update', value => {
+      expect(typeof value).toBe('number');
+    });
+
+    animate.on('complete', () => {
+      done();
+    });
+
+    animate.start();
+  });
+
+  it('should handle delay option correctly', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+      delay: 50,
+    });
+
+    const startTime = performance.now();
+
+    animate.on('update', value => {
+      const elapsed = performance.now() - startTime;
+      expect(elapsed).toBeGreaterThanOrEqual(50);
+      expect(value).toBeGreaterThanOrEqual(0);
+      expect(value).toBeLessThanOrEqual(100);
+    });
+
+    animate.on('complete', () => {
+      done();
+    });
+
+    animate.start();
+  });
+
+  it('should handle reverse direction correctly', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+      direction: 'reverse',
+    });
+
+    animate.on('update', value => {
+      expect(value).toBeLessThanOrEqual(100);
+      expect(value).toBeGreaterThanOrEqual(0);
+    });
+
+    animate.on('complete', () => {
+      expect(animate['previousValue']).toBe(0);
+      done();
+    });
+
+    animate.start();
+  });
+
+  it('should handle alternate direction correctly', done => {
+    const updates: number[] = [];
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+      direction: 'alternate',
+      loop: 2,
+    });
+
+    animate.on('update', value => {
+      updates.push(value as number);
+    });
+
+    animate.on('complete', () => {
+      expect(updates.indexOf(100)).toBeGreaterThan(0);
+      expect(updates.indexOf(100)).toBeLessThan(updates.length - 1);
+      expect(updates[updates.length - 1]).toBe(0);
+      done();
+    });
+
+    animate.start();
+  });
+
+  it('should handle loop option correctly', done => {
+    const updates: number[] = [];
+
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+      loop: 2,
+    });
+
+    animate.on('update', value => {
+      updates.push(value as number);
+    });
+
+    // checks if there are two 100s in the updates array
+    animate.on('complete', () => {
+      expect(updates.filter((x) => x === 100).length).toBe(2);
+      done();
+    });
+
+    animate.start();
+  });
+
+  it('should handle offset option correctly', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+      offset: [0.2, 0.8],
+    });
+
+    animate.on('update', value => {
+      console.log(value);
+      expect(value).toBeGreaterThanOrEqual(20);
+      expect(value).toBeLessThanOrEqual(80);
+    });
+
+    animate.on('complete', () => {
+      done();
+    });
+
+    animate.start();
+  });
+
+
   it('should emit start event', done => {
     const animate = new Animate({
       from: 0,
@@ -179,20 +387,4 @@ describe('Animate', () => {
     animate.start();
   });
 
-  it('should throw error for unsupported value types', (done) => {
-    const animate = new Animate({ // @ts-expect-error This is testing an error case
-      from: 'unsupported', // @ts-expect-error This is testing an error case
-      to: 'unsupported',
-      duration: 30,
-      easing: e.linear,
-    });
-
-    animate.on('error', (error) => {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe('Unsupported value types');
-      done();
-    });
-
-    animate.start();
-  });
 });
