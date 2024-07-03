@@ -131,6 +131,9 @@ Creates an animation instance.
 - `to` (AnimatableValue): The target value.
 - `duration` (number): The duration of the animation in milliseconds.
 - `easing` (EasingFunction, optional): The easing function to use. Default is `Easing.linear`.
+- `delay` (number, optional): The delay before the animation starts in milliseconds. Default is `0`.
+- `direction` ('normal' | 'reverse' | 'alternate', optional): The direction of the animation. Default is `'normal'`.
+- `loop` (number, optional): The number of times the animation should loop. Default is `1`.
 
 #### Methods
 

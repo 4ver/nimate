@@ -127,12 +127,7 @@ export class Animate extends EventEmitter {
   private tick = ({ timestamp }: { timestamp: number }) => {
     const elapsed = timestamp - this.startTime - this.delay;
 
-    // Handle the initial state
     if (elapsed < 0) {
-      if (JSON.stringify(this.previousValue) !== JSON.stringify(this.from)) {
-        this.emit('update', this.from);
-        this.previousValue = this.from;
-      }
       this.process = sync.update(this.tick, true);
       return;
     }
@@ -174,7 +169,6 @@ export class Animate extends EventEmitter {
     this.isReversed = this.direction === 'reverse';
     this.hasCompleted = false;
     this.emit('start');
-    this.previousValue = this.from;
     this.process = sync.update(this.tick, true);
     return this;
   }
