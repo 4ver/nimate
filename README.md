@@ -119,6 +119,40 @@ parallelSequence
 parallelSequence.start();
 ```
 
+### Queue of Animations
+
+```javascript
+import { Animate, Queue, Easing } from 'nimate';
+
+// Create individual animations
+const animate1 = new Animate({
+  from: { x: 0, y: 0 },
+  to: { x: 100, y: 50 },
+  duration: 1000,
+  easing: Easing.easeInOutQuad,
+});
+
+const animate2 = new Animate({
+  from: { x: 100, y: 50 },
+  to: { x: 200, y: 100 },
+  duration: 1000,
+  easing: Easing.easeInOutQuad,
+});
+
+// Create a queue and add animations
+const queue = new Queue();
+queue.add(animate1);
+queue.add(animate2);
+
+// Attach event listeners
+queue
+  .on('start', (animation) => console.log('Queue Animation Start', animation))
+  .on('update', (value, animation) => console.log('Queue Animation Update:', value, animation))
+  .on('complete', (animation) => console.log('Queue Animation Complete', animation))
+  .on('stop', (animation) => console.log('Queue Animation Stop', animation))
+  .on('complete', () => console.log('All animations in the queue are complete'));
+```
+
 ## 📚 API
 
 ### `Animate`
@@ -167,3 +201,22 @@ Creates a sequence of animations.
 - `update`: Emitted on each update with the current value.
 - `complete`: Emitted when the sequence completes.
 - `stop`: Emitted when the sequence is stopped.
+
+### `Queue`
+
+Creates a queue of animations that are executed sequentially.
+
+#### Methods
+
+- `add(animation: Animate)`: Adds an `Animate` instance to the queue.
+- `clear()`: Clears the queue and stops any currently running animation.
+- `stop()`: Stops the currently running animation without clearing the queue.
+
+#### Events
+
+- `start`: Emitted when an animation in the queue starts.
+- `update`: Emitted on each update with the current value and animation.
+- `complete`: Emitted when an animation in the queue completes.
+- `stop`: Emitted when an animation in the queue is stopped.
+- `complete`: Emitted when all animations in the queue are complete.
+```
