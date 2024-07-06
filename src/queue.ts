@@ -1,14 +1,17 @@
 import EventEmitter from 'eventemitter3';
 import { Animate } from './animate';
+import { Blend } from './blend';
+
+type AnimationType = Animate | Blend;
 
 export class Queue extends EventEmitter {
-  private animations: Animate[] = [];
+  private animations: AnimationType[] = [];
 
   constructor() {
     super();
   }
 
-  public add(animation: Animate) {
+  public add(animation: AnimationType) {
     this.animations.push(animation);
     animation.on('start', () => this.emit('start', animation));
     animation.on('update', (value: any) => this.emit('update', value, animation));
@@ -30,7 +33,7 @@ export class Queue extends EventEmitter {
     }
   }
 
-  private onAnimationComplete(animation: Animate) {
+  private onAnimationComplete(animation: AnimationType) {
     this.emit('complete', animation);
     this.animations.shift(); // Remove the completed animation from the queue
     this.startNextAnimation(); // Start the next animation in the queue

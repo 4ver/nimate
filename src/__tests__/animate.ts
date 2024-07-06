@@ -119,7 +119,7 @@ describe('Animate', () => {
     });
 
     animate.on('complete', () => {
-      expect(animate['previousValue']).toBe(0);
+      expect(animate['currentValue']).toBe(0);
       done();
     });
 

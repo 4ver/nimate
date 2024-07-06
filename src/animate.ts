@@ -35,7 +35,7 @@ export class Animate extends EventEmitter {
   private loop: number;
   private startTime: number;
   private process?: Process;
-  private previousValue: AnimatableValue;
+  private currentValue: AnimatableValue;
   private loopsCompleted: number;
   private isReversed: boolean;
   private hasCompleted: boolean;
@@ -80,10 +80,10 @@ export class Animate extends EventEmitter {
     this.direction = direction;
     this.loop = loop;
     this.startTime = performance.now();
-    this.previousValue = from;
     this.loopsCompleted = 0;
     this.isReversed = direction === 'reverse';
     this.hasCompleted = false;
+    this.currentValue = from;
   }
 
   private isValidAnimatableValue(value: any): boolean {
@@ -147,6 +147,7 @@ export class Animate extends EventEmitter {
     const easedT = this.easing(t);
 
     const currentValue = this.getInterpolatedValue(this.from, this.to, easedT);
+    this.currentValue = currentValue;
 
     this.emit('update', currentValue);
 
@@ -178,6 +179,10 @@ export class Animate extends EventEmitter {
     this.emit('start');
     this.process = sync.update(this.tick, true);
     return this;
+  }
+
+  public getCurrentValue(): AnimatableValue {
+    return this.currentValue;
   }
 
   public stop() {

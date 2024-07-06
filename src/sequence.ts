@@ -1,7 +1,8 @@
 import EventEmitter from 'eventemitter3';
 import { Animate, AnimatableValue } from './animate';
+import { Blend } from './blend';
 
-type SequenceItem = Animate | Sequence;
+type SequenceItem = Animate | Blend | Sequence;
 
 interface SequenceOptions {
   items: SequenceItem[];
@@ -39,7 +40,7 @@ export class Sequence extends EventEmitter {
       const item = this.items[this.currentIndex];
       this.currentIndex++;
 
-      if (item instanceof Animate) {
+      if (item instanceof Animate || item instanceof Blend) {
         this.activeAnimates++;
         item.on('update', (value: AnimatableValue) => this.emit('update', value));
         item.on('complete', this.handleComplete);
@@ -69,7 +70,7 @@ export class Sequence extends EventEmitter {
 
   public stop() {
     this.items.forEach(item => {
-      if (item instanceof Animate) {
+      if (item instanceof Animate || item instanceof Blend) {
         item.stop();
       } else if (item instanceof Sequence) {
         item.stop();

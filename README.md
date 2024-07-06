@@ -156,6 +156,45 @@ queue
 queue.start();
 ```
 
+### Blending Animations
+
+The `Blend` object allows you to pass multiple `Animate` objects and blend their results.
+
+```javascript
+import { Animate, Blend } from 'nimate';
+
+// Create individual animations
+const animateAlpha = new Animate({
+  from: { a: 1.0 },
+  to: { a: 0.2 },
+  duration: 1000,
+});
+
+const animateColor = new Animate({
+  from: { r: 255, g: 255, b: 0 },
+  to: { r: 255, g: 255, b: 255 },
+  duration: 1000,
+});
+
+// Define a blend function
+const blendFunction = (values) => ({ ...values[1], ...values[0] });
+
+// Create a Blend object
+const blend = new Blend({
+  animates: [animateAlpha, animateColor],
+  blendFunction: blendFunction,
+});
+
+// Attach event listeners
+blend.on('start', () => console.log('Blend Start'));
+blend.on('update', (value) => console.log('Blended value:', value));
+blend.on('complete', () => console.log('Blend Complete'));
+blend.on('stop', () => console.log('Blend Stop'));
+
+// Start the blend animation
+blend.start();
+```
+
 ## 📚 API
 
 ### `Animate`
@@ -224,7 +263,9 @@ Creates a queue of animations that are executed sequentially.
 
 #### Methods
 
-- `add(animation: Animate)`: Adds an `Animate` instance to the queue.
+- `add(animation
+
+: Animate | Blend)`: Adds an `Animate` or `Blend` instance to the queue.
 - `clear()`: Clears the queue and stops any currently running animation.
 - `stop()`: Stops the currently running animation without clearing the queue.
 
@@ -235,3 +276,25 @@ Creates a queue of animations that are executed sequentially.
 - `complete`: Emitted when an animation in the queue completes.
 - `stop`: Emitted when an animation in the queue is stopped.
 - `complete`: Emitted when all animations in the queue are complete.
+
+### `Blend`
+
+Creates a blended animation from multiple `Animate` objects.
+
+#### Options
+
+- `animates` (Animate[]): The animations to blend.
+- `blendFunction` (BlendFunction): The function to blend the animation values.
+
+#### Methods
+
+- `start()`: Starts the blended animation.
+- `stop()`: Stops the blended animation.
+- `setBlendFunction(blendFunction: BlendFunction)`: Sets a new blend function.
+
+#### Events
+
+- `start`: Emitted when the blended animation starts.
+- `update`: Emitted on each update with the blended value.
+- `complete`: Emitted when the blended animation completes.
+- `stop`: Emitted when the blended animation is stopped.
