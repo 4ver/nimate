@@ -111,7 +111,7 @@ const parallelSequence = new Sequence({ items: [sequence1, animate3], parallel: 
 // Attach event listeners
 parallelSequence
   .on('start', () => console.log('Parallel Sequence Start'))
-  .on('update', value => console.log('Parallel Sequence Update:', value))
+  .on('update', value => console.log('Parallel Sequence Update'))
   .on('complete', () => console.log('Parallel Sequence Complete'))
   .on('stop', () => console.log('Parallel Sequence Stop'));
 
@@ -151,6 +151,9 @@ queue
   .on('complete', (animation) => console.log('Queue Animation Complete', animation))
   .on('stop', (animation) => console.log('Queue Animation Stop', animation))
   .on('complete', () => console.log('All animations in the queue are complete'));
+
+// Start the queue
+queue.start();
 ```
 
 ## 📚 API
@@ -173,6 +176,7 @@ Creates an animation instance.
 
 - `start()`: Starts the animation.
 - `stop()`: Stops the animation.
+- `set(options: SetOptions)`: Updates the animation properties while it is running.
 
 #### Events
 
@@ -180,6 +184,18 @@ Creates an animation instance.
 - `update`: Emitted on each update with the current value.
 - `complete`: Emitted when the animation completes.
 - `stop`: Emitted when the animation is stopped.
+
+#### `SetOptions`
+
+The `set` method accepts an object with the following optional properties:
+
+- `from` (AnimatableValue, optional): The new initial value.
+- `to` (AnimatableValue, optional): The new target value.
+- `duration` (number, optional): The new duration of the animation in milliseconds.
+- `easing` (EasingFunction, optional): The new easing function to use.
+- `delay` (number, optional): The new delay before the animation starts in milliseconds.
+- `direction` ('normal' | 'reverse' | 'alternate', optional): The new direction of the animation.
+- `loop` (number, optional): The new number of times the animation should loop.
 
 ### `Sequence`
 
@@ -219,4 +235,3 @@ Creates a queue of animations that are executed sequentially.
 - `complete`: Emitted when an animation in the queue completes.
 - `stop`: Emitted when an animation in the queue is stopped.
 - `complete`: Emitted when all animations in the queue are complete.
-```

@@ -15,6 +15,16 @@ interface AnimateOptions {
   loop?: number;
 }
 
+interface SetOptions {
+  from?: AnimatableValue;
+  to?: AnimatableValue;
+  duration?: number;
+  easing?: TEasing;
+  delay?: number;
+  direction?: 'normal' | 'reverse' | 'alternate';
+  loop?: number;
+}
+
 export class Animate extends EventEmitter {
   private from: AnimatableValue;
   private to: AnimatableValue;
@@ -176,5 +186,62 @@ export class Animate extends EventEmitter {
       this.emit('stop');
     }
     return this;
+  }
+
+  public set(options: SetOptions) {
+    if (options.from !== undefined) {
+      if (!this.isValidAnimatableValue(options.from)) {
+        throw new Error('Invalid animatable value');
+      }
+      this.from = options.from;
+    }
+
+    if (options.to !== undefined) {
+      if (!this.isValidAnimatableValue(options.to)) {
+        throw new Error('Invalid animatable value');
+      }
+      this.to = options.to;
+    }
+
+    if (options.duration !== undefined) {
+      if (typeof options.duration !== 'number' || options.duration <= 0) {
+        throw new Error('Duration must be a positive number');
+      }
+      this.duration = options.duration;
+    }
+
+    if (options.easing !== undefined) {
+      this.easing = options.easing;
+    }
+
+    if (options.delay !== undefined) {
+      if (typeof options.delay !== 'number' || options.delay < 0) {
+        throw new Error('Delay must be a non-negative number');
+      }
+      this.delay = options.delay;
+    }
+
+    if (options.direction !== undefined) {
+      if (!['normal', 'reverse', 'alternate'].includes(options.direction)) {
+        throw new Error('Invalid direction');
+      }
+      this.direction = options.direction;
+      this.isReversed = options.direction === 'reverse';
+    }
+
+    if (options.loop !== undefined) {
+      if (typeof options.loop !== 'number' || options.loop < 0) {
+        throw new Error('Loop must be a non-negative number');
+      }
+      this.loop = options.loop;
+      this.loopsCompleted = 0;
+    }
+
+    // Restart the animation with updated properties
+    this.startTime = performance.now();
+    if (this.process !== undefined) {
+      cancelSync.update(this.process);
+    }
+    this.process = sync.update(this.tick, true);
   }
 }

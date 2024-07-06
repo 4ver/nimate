@@ -352,4 +352,240 @@ describe('Animate', () => {
     animate.start();
   });
 
+  it('should update the from value using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ from: 50 });
+      expect(animate['from']).toBe(50);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should update the to value using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ to: 200 });
+      expect(animate['to']).toBe(200);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should update the duration using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 200,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ duration: 100 });
+      expect(animate['duration']).toBe(100);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should update the easing using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ easing: e.inOutQuad });
+      expect(animate['easing']).toBe(e.inOutQuad);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should update the delay using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      delay: 50,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ delay: 0 });
+      expect(animate['delay']).toBe(0);
+    }, 25);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should update the direction using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      direction: 'normal',
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ direction: 'reverse' });
+      expect(animate['direction']).toBe('reverse');
+      expect(animate['isReversed']).toBe(true);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should update the loop using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      loop: 1,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ loop: 2 });
+      expect(animate['loop']).toBe(2);
+      expect(animate['loopsCompleted']).toBe(0);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should handle multiple properties update using set method', done => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    setTimeout(() => {
+      animate.set({ from: 50, to: 150, duration: 200, easing: e.inOutQuad });
+      expect(animate['from']).toBe(50);
+      expect(animate['to']).toBe(150);
+      expect(animate['duration']).toBe(200);
+      expect(animate['easing']).toBe(e.inOutQuad);
+    }, 50);
+
+    animate.on('complete', () => {
+      done();
+    });
+  });
+
+  it('should throw an error for invalid animatable value using set method', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    expect(() => {
+      animate.set({ from: 'invalid' as any });
+    }).toThrow('Invalid animatable value');
+  });
+
+  it('should throw an error for negative duration using set method', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    expect(() => {
+      animate.set({ duration: -100 });
+    }).toThrow('Duration must be a positive number');
+  });
+
+  it('should throw an error for negative delay using set method', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      delay: 0,
+      easing: e.linear,
+    });
+
+    expect(() => {
+      animate.set({ delay: -50 });
+    }).toThrow('Delay must be a non-negative number');
+  });
+
+  it('should throw an error for invalid direction using set method', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      direction: 'normal',
+      easing: e.linear,
+    });
+
+    expect(() => {
+      animate.set({ direction: 'invalid' as any });
+    }).toThrow('Invalid direction');
+  });
+
+  it('should throw an error for negative loop using set method', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      loop: 0,
+      easing: e.linear,
+    });
+
+    expect(() => {
+      animate.set({ loop: -1 });
+    }).toThrow('Loop must be a non-negative number');
+  });
+
 });
