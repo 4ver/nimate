@@ -5,7 +5,7 @@ on:
     branches:
       - main
     tags:
-      - '*.*.*' # Matches semver tags without 'v' prefix
+      - '*.*.*'
 
 jobs:
   build:
@@ -55,17 +55,18 @@ jobs:
     - name: Build project
       run: npm run build
 
-    - name: Debug npm token
-      run: echo $NODE_AUTH_TOKEN
-      env:
-        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+    - name: Extract tag name
+      id: extract_tag
+      run: echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
-    - run: npm version ${{ github.event.release.tag_name }} --no-git-tag-version
+    - name: Set npm version
+      run: npm version ${{ env.TAG_NAME }} --no-git-tag-version
+
     - name: Publish to npm
       env:
         NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
-        VERSION=${{ github.event.release.tag_name }}
+        VERSION=${{ env.TAG_NAME }}
         if [[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
           npm publish
         else
