@@ -306,3 +306,7 @@ Creates a blended animation from multiple `Animate` objects.
 - `update`: Emitted on each update with the blended value.
 - `complete`: Emitted when the blended animation completes.
 - `stop`: Emitted when the blended animation is stopped.
+
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F4ver%2Fnimate.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2F4ver%2Fnimate?ref=badge_large)
