@@ -329,4 +329,37 @@ describe('Blend', () => {
     expect(blendedValue).toBe(200);
   });
 
+  it('should resolve promise when blend animation completes', async () => {
+    const animate1 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: e.linear,
+    });
+
+    const animate2 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: e.linear,
+    });
+
+    const blendFunction = (values: AnimatableValue[]) => values.reduce((acc, val) => (acc as number) + (val as number), 0) as number;
+
+    const blend = new Blend({
+      animates: [animate1, animate2],
+      blendFunction: blendFunction,
+    });
+
+    let blendedValue = 0;
+
+    blend.on('update', value => {
+      blendedValue = value as number;
+    });
+
+    await blend.start().promise();
+    expect(blendedValue).toBe(200);
+  });
+
+
 });

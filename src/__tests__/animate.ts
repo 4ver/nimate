@@ -599,4 +599,63 @@ describe('Animate', () => {
     await animate.start().promise();
     expect(animate['currentValue']).toBe(100);
   });
+
+  it('should throw an error for unsupported value types in getInterpolatedValue', () => {
+    const animate = new Animate({
+      from: { x: 0, y: { z: 0 } },
+      to: { x: 100, y: { z: 1 } as any },
+      duration: 100,
+      easing: e.linear,
+    });
+
+    expect(() => {
+      (animate as any).getInterpolatedValue(
+        { x: 0, y: { z: 0 } },
+        { x: 100, y: { z: 'unsupported' } },
+        0.5
+      );
+    }).toThrow('Unsupported value types');
+  });
+
+  it('should throw an error for unsupported value types in getInterpolatedValue', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 1,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    expect(() => {
+      (animate as any).getInterpolatedValue(0, { x: 100 }, 0.5);
+    }).toThrow('Unsupported value types');
+  });
+
+  it('should create a new promise if currentPromise is not defined', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    const promise = animate.promise();
+    expect(promise).toBeInstanceOf(Promise);
+    expect(animate['currentPromise']).toBe(promise);
+  });
+
+
+  it('should throw an error for invalid animatable value in set method', () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 100,
+      easing: e.linear,
+    });
+
+    animate.start();
+
+    expect(() => {
+      animate.set({ to: 'invalid' as any });
+    }).toThrow('Invalid animatable value');
+  });
 });

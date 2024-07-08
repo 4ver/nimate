@@ -169,4 +169,73 @@ describe('Sequence', () => {
     await sequence.start().promise();
     expect(animate2.getCurrentValue()).toBe(200);
   });
+
+  it('should resolve promise and emit complete when all parallel animations complete', async () => {
+    const animate1 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: easing.linear,
+    });
+
+    const animate2 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: easing.linear,
+    });
+
+    const sequence = new Sequence({ items: [animate1, animate2], parallel: true });
+
+    const completePromise = new Promise<void>((resolve) => {
+      sequence.on('complete', resolve);
+    });
+
+    sequence.start();
+    await completePromise;
+
+    expect(sequence['promiseResolver']).toBeUndefined();
+  });
+
+  it('should stop nested sequences', done => {
+    const animate1 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: easing.linear,
+    });
+
+    const animate2 = new Animate({
+      from: 100,
+      to: 200,
+      duration: 30,
+      easing: easing.linear,
+    });
+
+    const nestedSequence = new Sequence({ items: [animate1, animate2] });
+    const sequence = new Sequence({ items: [nestedSequence] });
+
+    nestedSequence.on('stop', () => {
+      done();
+    });
+
+    sequence.start();
+    sequence.stop();
+  });
+
+
+  it('should create a new promise if currentPromise is not defined', () => {
+    const animate1 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: easing.linear,
+    });
+
+    const sequence = new Sequence({ items: [animate1] });
+
+    const promise = sequence.promise();
+    expect(promise).toBeInstanceOf(Promise);
+    expect(sequence['currentPromise']).toBe(promise);
+  });
 });
