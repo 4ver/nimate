@@ -33,13 +33,10 @@
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",
-    "@types/raf": "^3.4.3",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.14.1",
     "eslint": "^8.57.0",
     "jest": "^29.7.0",
-    "raf": "^3.4.1",
-    "request-animation-frame-polyfill": "^1.1.2",
     "ts-jest": "^29.1.5"
   }
 }
