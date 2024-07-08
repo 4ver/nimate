@@ -588,4 +588,15 @@ describe('Animate', () => {
     }).toThrow('Loop must be a non-negative number');
   });
 
+  it('should resolve promise when animation completes', async () => {
+    const animate = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: e.linear,
+    });
+
+    await animate.start().promise();
+    expect(animate['currentValue']).toBe(100);
+  });
 });

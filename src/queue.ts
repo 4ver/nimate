@@ -6,6 +6,8 @@ type AnimationType = Animate | Blend;
 
 export class Queue extends EventEmitter {
   private animations: AnimationType[] = [];
+  private promiseResolver?: () => void;
+  private currentPromise?: Promise<void>;
 
   constructor() {
     super();
@@ -30,6 +32,10 @@ export class Queue extends EventEmitter {
       animation.start();
     } else {
       this.emit('complete'); // Emit complete event when all animations in the queue have completed
+      if (this.promiseResolver) {
+        this.promiseResolver();
+        this.promiseResolver = undefined;
+      }
     }
   }
 
@@ -50,5 +56,18 @@ export class Queue extends EventEmitter {
     if (this.animations.length > 0) {
       this.animations[0].stop();
     }
+    if (this.promiseResolver) {
+      this.promiseResolver();
+      this.promiseResolver = undefined;
+    }
+  }
+
+  public promise(): Promise<void> {
+    if (!this.currentPromise) {
+      this.currentPromise = new Promise<void>((resolve) => {
+        this.promiseResolver = resolve;
+      });
+    }
+    return this.currentPromise;
   }
 }

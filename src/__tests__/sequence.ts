@@ -150,4 +150,23 @@ describe('Sequence', () => {
     sequence.start();
     sequence.stop();
   });
+
+  it('should resolve promise when sequence completes', async () => {
+    const animate1 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+    });
+
+    const animate2 = new Animate({
+      from: 100,
+      to: 200,
+      duration: 30,
+    });
+
+    const sequence = new Sequence({ items: [animate1, animate2] });
+
+    await sequence.start().promise();
+    expect(animate2.getCurrentValue()).toBe(200);
+  });
 });

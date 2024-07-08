@@ -6,4 +6,5 @@ module.exports = {
   coverageDirectory: 'coverage',
   collectCoverageFrom: ['src/**/*.ts'],
   setupFiles: ['<rootDir>/jest.setup.js'],
+  coverageReporters: ['json', 'lcov', 'text', 'clover'],
 };

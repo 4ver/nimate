@@ -78,4 +78,28 @@ describe('Queue', () => {
     expect(queue['animations'].length).toBe(0);
     done();
   });
+
+  it('should resolve promise when queue completes', async () => {
+    const animate1 = new Animate({
+      from: 0,
+      to: 100,
+      duration: 30,
+      easing: e.linear,
+    });
+
+    const animate2 = new Animate({
+      from: 100,
+      to: 200,
+      duration: 30,
+      easing: e.linear,
+    });
+
+    const queue = new Queue();
+    queue.add(animate1);
+    queue.add(animate2);
+
+    await queue.promise();
+    expect(animate2.getCurrentValue()).toBe(200);
+  });
+
 });
