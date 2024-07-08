@@ -1,6 +1,7 @@
 # nimate
 
 [![npm](https://img.shields.io/npm/v/nimate)](https://www.npmjs.com/package/nimate)
+![npm bundle size](https://img.shields.io/bundlephobia/minzip/nimate)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F4ver%2Fnimate.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2F4ver%2Fnimate?ref=badge_shield&issueType=license)
 [![codecov](https://codecov.io/gh/4ver/nimate/branch/main/graph/badge.svg)](https://codecov.io/gh/4ver/nimate)
 
