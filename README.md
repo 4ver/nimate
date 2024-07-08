@@ -8,15 +8,14 @@
 
 ## ✨ Features
 
-- **Flexible Animation Support**: Animate numbers, objects, and arrays with ease.
-- **Easing Functions**: Uses [streamich/ts-easing](https://github.com/streamich/ts-easing) for a variety of easing functions.
-- **Cross-Environment Compatibility**: Works seamlessly in browsers, Node.js, and other JavaScript environments.
-- **Events**: Emits events for `start`, `update`, `complete`, and `stop` for animations, sequences, blends, and queues.
-- **Promise Support**: Supports promises to allow for easy synchronization and chaining.
-- **Blended Animations**: Combine multiple animations into a single blended animation using custom blend functions.
-- **Queues**: Queue support so animations added to the queue auto-run on a fifo basis.
-- **Sequences**: Create sequences of animations that can run either in parallel or in series.
-- **Flexible Configuration**: Update animation properties on the fly with the `set` method.
+- **Flexible Animation Support**: Animate numbers, objects, and arrays.
+- **Easing Functions**: Uses [streamich/ts-easing](https://github.com/streamich/ts-easing) for easing functions.
+- **Cross-Environment Compatibility**: Works in browsers, Node.js, and other JavaScript environments.
+- **Events**: Emits `start`, `update`, `complete`, and `stop` events for animations, sequences, blends, and queues.
+- **Promise Support**: Supports promises for easy synchronization and chaining.
+- **Blended Animations**: Combine multiple animations using custom blend functions.
+- **Queues**: Auto-run animations in a FIFO queue.
+- **Sequences**: Run animations in parallel or in series.
 
 ## 📦 Installation
 
