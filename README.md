@@ -1,10 +1,7 @@
 # nimate
 
 [![npm](https://img.shields.io/npm/v/nimate)](https://www.npmjs.com/package/nimate)
-[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F4ver%2Fnimate.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
-
-![issues](https://img.shields.io/github/issues/4ver/nimate)
-![stars](https://img.shields.io/github/stars/4ver/nimate)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F4ver%2Fnimate.svg?type=shield&issueType=license)](https://app.fossa.com/projects/git%2Bgithub.com%2F4ver%2Fnimate?ref=badge_shield&issueType=license)
 [![codecov](https://codecov.io/gh/4ver/nimate/branch/main/graph/badge.svg)](https://codecov.io/gh/4ver/nimate)
 
 **nimate** is a simple, flexible animation library designed to work across all JavaScript environments. With **nimate**, you can create smooth animations and sequence them with ease, utilizing easing functions from the `ts-easing` package.
