@@ -1,16 +1,25 @@
 # nimate
 
-[![npm](https://img.shields.io/npm/v/nimate)](https://www.npmjs.com/package/nimate)  ![issues](https://img.shields.io/github/issues/4ver/nimate) ![stars](https://img.shields.io/github/stars/4ver/nimate)
+[![npm](https://img.shields.io/npm/v/nimate)](https://www.npmjs.com/package/nimate)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2F4ver%2Fnimate.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FSBoudrias%2FInquirer.js?ref=badge_shield)
+
+![issues](https://img.shields.io/github/issues/4ver/nimate)
+![stars](https://img.shields.io/github/stars/4ver/nimate)
+[![codecov](https://codecov.io/gh/4ver/nimate/branch/main/graph/badge.svg)](https://codecov.io/gh/4ver/nimate)
 
 **nimate** is a simple, flexible animation library designed to work across all JavaScript environments. With **nimate**, you can create smooth animations and sequence them with ease, utilizing easing functions from the `ts-easing` package.
 
 ## ✨ Features
 
-- Supports animations of numbers, objects, and arrays.
-- [streamich/ts-easing](https://github.com/streamich/ts-easing) for easing.
-- Configurable sequences that can run in parallel or series.
-- Works in browsers, Node.js, and other JavaScript environments.
-- Emits events for `start`, `update`, `complete`, and `stop` for animations and sequences.
+- **Flexible Animation Support**: Animate numbers, objects, and arrays with ease.
+- **Easing Functions**: Uses [streamich/ts-easing](https://github.com/streamich/ts-easing) for a variety of easing functions.
+- **Cross-Environment Compatibility**: Works seamlessly in browsers, Node.js, and other JavaScript environments.
+- **Events**: Emits events for `start`, `update`, `complete`, and `stop` for animations, sequences, blends, and queues.
+- **Promise Support**: Supports promises to allow for easy synchronization and chaining.
+- **Blended Animations**: Combine multiple animations into a single blended animation using custom blend functions.
+- **Queues**: Queue support so animations added to the queue auto-run on a fifo basis.
+- **Sequences**: Create sequences of animations that can run either in parallel or in series.
+- **Flexible Configuration**: Update animation properties on the fly with the `set` method.
 
 ## 📦 Installation
 
@@ -25,14 +34,14 @@ npm install nimate
 ### Basic Animation
 
 ```javascript
-import { Animate, Easing } from 'nimate';
+import { Animate, easing } from 'nimate';
 
 // Create an animation
 const animate = new Animate({
   from: { x: 0, y: 0 },
   to: { x: 100, y: 50 },
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 animate
@@ -46,21 +55,21 @@ animate
 ### Sequence of Animations
 
 ```javascript
-import { Animate, Sequence, Easing } from 'nimate';
+import { Animate, Sequence, easing } from 'nimate';
 
 // Create individual animations
 const animate1 = new Animate({
   from: { x: 0, y: 0, nested: { z: 0 } },
   to: { x: 100, y: 50, nested: { z: 100 } },
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 const animate2 = new Animate({
   from: [0, 0, { a: 0 }],
   to: [100, 50, { a: 100 }],
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 // Create a sequence with the animations
@@ -78,28 +87,28 @@ sequence
 ### Parallel Sequences
 
 ```javascript
-import { Animate, Sequence, Easing } from 'nimate';
+import { Animate, Sequence, easing } from 'nimate';
 
 // Create individual animations
 const animate1 = new Animate({
   from: { x: 0, y: 0, nested: { z: 0 } },
   to: { x: 100, y: 50, nested: { z: 100 } },
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 const animate2 = new Animate({
   from: [0, 0, { a: 0 }],
   to: [100, 50, { a: 100 }],
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 const animate3 = new Animate({
   from: { x: 50, y: 50 },
   to: { x: 150, y: 100 },
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 // Create a sequence with the animations
@@ -122,21 +131,21 @@ parallelSequence.start();
 ### Queue of Animations
 
 ```javascript
-import { Animate, Queue, Easing } from 'nimate';
+import { Animate, Queue, easing } from 'nimate';
 
 // Create individual animations
 const animate1 = new Animate({
   from: { x: 0, y: 0 },
   to: { x: 100, y: 50 },
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 const animate2 = new Animate({
   from: { x: 100, y: 50 },
   to: { x: 200, y: 100 },
   duration: 1000,
-  easing: Easing.easeInOutQuad,
+  easing: easing.easeInOutQuad,
 });
 
 // Create a queue and add animations
@@ -192,7 +201,7 @@ blend.on('complete', () => console.log('Blend Complete'));
 blend.on('stop', () => console.log('Blend Stop'));
 
 // Start the blend animation
-blend.start();
+blend.start()
 ```
 
 ## 📚 API
@@ -206,16 +215,17 @@ Creates an animation instance.
 - `from` (AnimatableValue): The initial value.
 - `to` (AnimatableValue): The target value.
 - `duration` (number): The duration of the animation in milliseconds.
-- `easing` (EasingFunction, optional): The easing function to use. Default is `Easing.linear`.
+- `easing` (EasingFunction, optional): The easing function to use. Default is `easing.linear`.
 - `delay` (number, optional): The delay before the animation starts in milliseconds. Default is `0`.
 - `direction` ('normal' | 'reverse' | 'alternate', optional): The direction of the animation. Default is `'normal'`.
 - `loop` (number, optional): The number of times the animation should loop. Default is `1`.
 
 #### Methods
 
-- `start()`: Starts the animation.
-- `stop()`: Stops the animation.
+- `start()`: Starts the animation and returns the animation instance.
+- `stop()`: Stops the animation and returns the animation instance.
 - `set(options: SetOptions)`: Updates the animation properties while it is running.
+- `promise()`: Returns a promise that resolves when the animation completes.
 
 #### Events
 
@@ -247,8 +257,9 @@ Creates a sequence of animations.
 
 #### Methods
 
-- `start()`: Starts the sequence.
-- `stop()`: Stops the sequence.
+- `start()`: Starts the sequence and returns the sequence instance.
+- `stop()`: Stops the sequence and returns the sequence instance.
+- `promise()`: Returns a promise that resolves when the sequence completes.
 
 #### Events
 
@@ -259,15 +270,14 @@ Creates a sequence of animations.
 
 ### `Queue`
 
-Creates a queue of animations that are executed sequentially.
+`Animate` objects in the queue are called sequentially and removed when complete. The start function of each `Animate` is called automatically when it is next to be played. For example, if the queue is empty and an `Animate` is added, it is played immediately."
 
 #### Methods
 
-- `add(animation
-
-: Animate | Blend)`: Adds an `Animate` or `Blend` instance to the queue.
+- `add(animation: Animate | Blend)`: Adds an `Animate` or `Blend` instance to the queue.
 - `clear()`: Clears the queue and stops any currently running animation.
 - `stop()`: Stops the currently running animation without clearing the queue.
+- `promise()`: Returns a promise that resolves when all animations in the queue are complete.
 
 #### Events
 
@@ -288,9 +298,10 @@ Creates a blended animation from multiple `Animate` objects.
 
 #### Methods
 
-- `start()`: Starts the blended animation.
-- `stop()`: Stops the blended animation.
+- `start()`: Starts the blended animation and returns the blend instance.
+- `stop()`: Stops the blended animation and returns the blend instance.
 - `setBlendFunction(blendFunction: BlendFunction)`: Sets a new blend function.
+- `promise()`: Returns a promise that resolves when the blended animation completes.
 
 #### Events
 

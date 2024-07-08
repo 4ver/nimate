@@ -13,6 +13,9 @@ export class Blend extends EventEmitter {
   private blendFunction: BlendFunction;
   private completedAnimations: Set<Animate>;
 
+  private promiseResolver?: () => void;
+  private currentPromise?: Promise<void>;
+
   constructor({ animates, blendFunction }: BlendOptions) {
     super();
 
@@ -37,6 +40,10 @@ export class Blend extends EventEmitter {
     this.completedAnimations.add(animate);
     if (this.completedAnimations.size === this.animates.length) {
       this.emit('complete');
+      if (this.promiseResolver) {
+        this.promiseResolver();
+        this.promiseResolver = undefined;
+      }
     }
   };
 
@@ -44,12 +51,21 @@ export class Blend extends EventEmitter {
     this.completedAnimations.clear();
     this.animates.forEach(animate => animate.start());
     this.emit('start');
+
+    this.currentPromise = new Promise<void>((resolve) => {
+      this.promiseResolver = resolve;
+    });
+
     return this;
   }
 
   public stop() {
     this.animates.forEach(animate => animate.stop());
     this.emit('stop');
+    if (this.promiseResolver) {
+      this.promiseResolver();
+      this.promiseResolver = undefined;
+    }
     return this;
   }
 
@@ -67,5 +83,14 @@ export class Blend extends EventEmitter {
     if (options.blendFunction !== undefined) {
       this.setBlendFunction(options.blendFunction);
     }
+  }
+
+  public promise(): Promise<void> {
+    if (!this.currentPromise) {
+      this.currentPromise = new Promise<void>((resolve) => {
+        this.promiseResolver = resolve;
+      });
+    }
+    return this.currentPromise;
   }
 }

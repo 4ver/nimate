@@ -26,6 +26,12 @@ jobs:
     - name: Run tests
       run: npm test
 
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v4.0.1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/lcov.info
+
     - name: Build project
       run: npm run build
 
@@ -47,6 +53,11 @@ jobs:
 
     - name: Build project
       run: npm run build
+
+    - name: Debug npm token
+      run: echo $NODE_AUTH_TOKEN
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
     - run: npm version ${{ github.event.release.tag_name }} --no-git-tag-version
     - name: Publish to npm

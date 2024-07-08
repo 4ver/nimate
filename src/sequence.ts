@@ -15,6 +15,9 @@ export class Sequence extends EventEmitter {
   private currentIndex: number;
   private activeAnimates: number;
 
+  private promiseResolver?: () => void;
+  private currentPromise?: Promise<void>;
+
   constructor({ items, parallel = false }: SequenceOptions) {
     super();
     this.items = items;
@@ -28,10 +31,18 @@ export class Sequence extends EventEmitter {
 
     if (this.parallel && this.activeAnimates === 0) {
       this.emit('complete');
+      if (this.promiseResolver) {
+        this.promiseResolver();
+        this.promiseResolver = undefined;
+      }
     } else if (!this.parallel) {
       this.next();
     } else if (this.currentIndex >= this.items.length && this.activeAnimates === 0) {
       this.emit('complete');
+      if (this.promiseResolver) {
+        this.promiseResolver();
+        this.promiseResolver = undefined;
+      }
     }
   };
 
@@ -57,6 +68,10 @@ export class Sequence extends EventEmitter {
       }
     } else if (!this.parallel && this.activeAnimates === 0) {
       this.emit('complete');
+      if (this.promiseResolver) {
+        this.promiseResolver();
+        this.promiseResolver = undefined;
+      }
     }
   };
 
@@ -65,6 +80,11 @@ export class Sequence extends EventEmitter {
     this.activeAnimates = 0;
     this.emit('start');
     this.next();
+
+    this.currentPromise = new Promise<void>((resolve) => {
+      this.promiseResolver = resolve;
+    });
+
     return this;
   }
 
@@ -77,6 +97,19 @@ export class Sequence extends EventEmitter {
       }
     });
     this.emit('stop');
+    if (this.promiseResolver) {
+      this.promiseResolver();
+      this.promiseResolver = undefined;
+    }
     return this;
+  }
+
+  public promise(): Promise<void> {
+    if (!this.currentPromise) {
+      this.currentPromise = new Promise<void>((resolve) => {
+        this.promiseResolver = resolve;
+      });
+    }
+    return this.currentPromise;
   }
 }

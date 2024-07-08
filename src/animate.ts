@@ -40,6 +40,9 @@ export class Animate extends EventEmitter {
   private isReversed: boolean;
   private hasCompleted: boolean;
 
+  private promiseResolver?: () => void;
+  private currentPromise?: Promise<void>;
+
   constructor({
     from,
     to,
@@ -167,6 +170,10 @@ export class Animate extends EventEmitter {
         if (this.process !== undefined) cancelSync.update(this.process);
         this.hasCompleted = true;
         this.emit('complete');
+        if (this.promiseResolver) {
+          this.promiseResolver();
+          this.promiseResolver = undefined;
+        }
       }
     }
   }
@@ -178,6 +185,11 @@ export class Animate extends EventEmitter {
     this.hasCompleted = false;
     this.emit('start');
     this.process = sync.update(this.tick, true);
+
+    this.currentPromise = new Promise<void>((resolve) => {
+      this.promiseResolver = resolve;
+    });
+
     return this;
   }
 
@@ -189,8 +201,21 @@ export class Animate extends EventEmitter {
     if (this.process !== undefined) {
       cancelSync.update(this.process);
       this.emit('stop');
+      if (this.promiseResolver) {
+        this.promiseResolver();
+        this.promiseResolver = undefined;
+      }
     }
     return this;
+  }
+
+  public promise(): Promise<void> {
+    if (!this.currentPromise) {
+      this.currentPromise = new Promise<void>((resolve) => {
+        this.promiseResolver = resolve;
+      });
+    }
+    return this.currentPromise;
   }
 
   public set(options: SetOptions) {
